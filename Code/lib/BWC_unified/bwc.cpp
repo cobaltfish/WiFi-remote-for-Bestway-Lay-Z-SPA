@@ -630,11 +630,12 @@ void BWC::_updateVirtualTempFix_ontempchange()
 
     // We can only know something about rate of change if we had continous cooling since last update
     // (Nobody messed with the heater during the 1 degree change)
-    if(_heatred_change_timestamp_ms < _temp_change_timestamp_ms) return;
+    // as timestamps, not time since, making sure that temp change after heat red change
+    if(_heatred_change_timestamp_ms > _temp_change_timestamp_ms) return;
     // rate of heating is not subject to change (fixed wattage and pool size) so do this only if cooling
     // and do not calibrate if bubbles has been on
     if(_vt_calibrated) return;
-    if(cio->cio_states.heatred || cio->cio_states.bubbles || (_bubbles_change_timestamp_ms < _temp_change_timestamp_ms)) return;
+    if(cio->cio_states.heatred || cio->cio_states.bubbles || (_bubbles_change_timestamp_ms > _temp_change_timestamp_ms)) return;  //making bubbles change before temp change
     if(_deltatemp > 0 && _virtual_temp > _ambient_temp) return; //temp is rising when it should be falling. Bail out
     if(_deltatemp < 0 && _virtual_temp < _ambient_temp) return; //temp is falling when it should be rising. Bail out
     float degAboveAmbient = _virtual_temp - _ambient_temp;
