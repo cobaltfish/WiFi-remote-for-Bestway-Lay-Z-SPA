@@ -850,7 +850,7 @@ String BWC::getJSONSettings(){
     doc[F("MODEL")] = cio->getModel();
     doc[F("NOTIFY")] = _notify;
     doc[F("NOTIFTIME")] = _notification_time;
-
+    doc[F("VTCAL")] = _vt_calibrated;
     // Serialize JSON to string
     String jsonmsg;
     if (serializeJson(doc, jsonmsg) == 0) {
